@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>APHEX</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --background-color: #0a0a0a;
+            --text-color: #f0f0f0;
+            --primary-glow: #8e2de2;
+            --secondary-glow: #4a00e0;
+            --card-background: #121212;
+        }
+
+        /* General Body Styles */
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            color: var(--text-color);
+            background-color: var(--background-color);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Canvas for Particle Background */
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.4;
+        }
+
+        /* Main Container */
+        .container {
+            text-align: center;
+            padding: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Fade-in animations for page load */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .main-title {
+            font-size: clamp(3rem, 6vw, 4.5rem);
+            font-weight: 700;
+            margin-bottom: 4rem;
+            text-shadow: 0 0 20px var(--primary-glow);
+            animation: fadeIn 0.8s ease-out both;
+        }
+
+        /* Cards Container */
+        .cards-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2.5rem;
+            flex-wrap: wrap;
+        }
+
+        .card-link {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            animation: fadeIn 0.8s ease-out both;
+        }
+        /* Staggered animation delay for cards */
+        .card-link:nth-child(1) { animation-delay: 0.2s; }
+        .card-link:nth-child(2) { animation-delay: 0.4s; }
+        .card-link:nth-child(3) { animation-delay: 0.6s; }
+
+        /* New Project Card Style */
+        .project-card {
+            position: relative;
+            width: 300px;
+            height: 200px;
+            background: var(--card-background);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Animated Gradient Border on Hover */
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: inherit;
+            padding: 2px;
+            background: conic-gradient(from 180deg at 50% 50%, var(--secondary-glow), var(--primary-glow), var(--secondary-glow));
+            -webkit-mask:
+                linear-gradient(#fff 0 0) content-box,
+                linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0;
+            transition: opacity 0.4s ease-out;
+            animation: rotate 4s linear infinite;
+        }
+
+        /* Subtle background pattern element */
+        .card-pattern {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            background-size: 30px 30px;
+        }
+
+        #card-1 .card-pattern {
+             background-image: radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px);
+        }
+        #card-2 .card-pattern {
+             background-image: linear-gradient(45deg, rgba(255,255,255,0.05) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.05) 75%), linear-gradient(45deg, rgba(255,255,255,0.05) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.05) 75%);
+             background-position: 0 0, 15px 15px;
+        }
+        #card-3 .card-pattern {
+             background-image: linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px);
+        }
+
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .card-link:hover .project-card {
+            transform: translateY(-10px) scale(1.03);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.7), 0 0 25px rgba(142, 45, 226, 0.4);
+        }
+
+        .card-link:hover .project-card::before {
+            opacity: 1;
+        }
+
+        .card-link:hover .card-pattern {
+            opacity: 1;
+        }
+
+        .project-content {
+            position: relative;
+            z-index: 2;
+            padding: 20px;
+            color: var(--text-color);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            background: var(--card-background);
+            border-radius: inherit;
+            transition: transform 0.4s ease;
+        }
+
+        .card-link:hover .project-content {
+            transform: translateY(-10px);
+        }
+
+        .card-icon {
+            margin-bottom: 1rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .card-icon svg {
+            width: 36px;
+            height: 36px;
+        }
+
+        .project-content h3 {
+            margin: 0 0 10px 0;
+            font-size: 28px;
+            font-weight: 600;
+        }
+
+        .project-content p {
+            margin: 0;
+            opacity: 0.7;
+            font-size: 1rem;
+            transition: opacity 0.3s ease;
+        }
+
+        .card-link:hover .project-content p {
+            opacity: 0.9;
+        }
+
+
+/* Styling for XPOSED image */
+#card-1 .card-image {
+    width: 190px;
+    height: auto;
+    margin-bottom: 8px;
+}
+
+/* Styling for BRATZ image */
+#card-2 .card-image {
+    width: 78px;
+    height: auto;
+    margin-bottom: 8px;
+}
+
+/* Styling for BOT image */
+#card-3 .card-image {
+    width: 86px;
+    height: auto;
+    margin-bottom: 8px;
+}
+    </style>
+</head>
+<body>
+
+    <canvas id="particle-canvas"></canvas>
+
+    <div class="container">
+        <h1 class="main-title">APHEX</h1>
+
+        <div class="cards-container">
+            <!-- Card 1: XPOSED -->
+            <a href="https://xposed.aphex.pro" class="card-link" target="_blank" rel="noopener noreferrer">
+                <div class="project-card" id="card-1">
+                    <div class="card-pattern"></div>
+                    <div class="project-content">
+                        <img src="xposed.png" alt="XPOSED" class="card-image">
+                        <h3>XPOSED</h3>
+                        <p>A collection of pictures</p>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Card 2: BRATZ -->
+            <a href="https://bratz.aphex.pro" class="card-link" target="_blank" rel="noopener noreferrer">
+                <div class="project-card" id="card-2">
+                    <div class="card-pattern"></div>
+                    <div class="project-content">
+                        <img src="bratz.png" alt="BRATZ" class="card-image">
+                        <h3>BRATZ</h3>
+                        <p>Your go-to movie hub</p>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Card 3: BOT -->
+            <a href="https://bot.aphex.pro" class="card-link" target="_blank" rel="noopener noreferrer">
+                <div class="project-card" id="card-3">
+                    <div class="card-pattern"></div>
+                    <div class="project-content">
+                        <img src="bot.png" alt="BOT" class="card-image">
+                        <h3>BOT</h3>
+                        <p>Official Discord bot</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // --- Dynamic Particle Background ---
+            const canvas = document.getElementById('particle-canvas');
+            const ctx = canvas.getContext('2d');
+            let particles = [];
+
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            resizeCanvas();
+
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() * canvas.height;
+                    this.size = Math.random() * 2 + 0.5;
+                    this.speedX = (Math.random() * 1 - 0.5) * 0.5;
+                    this.speedY = (Math.random() * 1 - 0.5) * 0.5;
+                    this.color = `rgba(255, 255, 255, ${Math.random() * 0.4 + 0.1})`;
+                }
+                update() {
+                    this.x += this.speedX;
+                    this.y += this.speedY;
+                    if (this.size > 0.1) this.size -= 0.005;
+                    if (this.size <= 0.1 || this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) {
+                        this.x = Math.random() * canvas.width;
+                        this.y = Math.random() * canvas.height;
+                        this.size = Math.random() * 2 + 0.5;
+                        this.speedX = (Math.random() * 1 - 0.5) * 0.5;
+                        this.speedY = (Math.random() * 1 - 0.5) * 0.5;
+                    }
+                }
+                draw() {
+                    ctx.fillStyle = this.color;
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+
+            function initParticles() {
+                const particleCount = Math.floor(canvas.width * canvas.height / 12000);
+                for (let i = 0; i < particleCount; i++) {
+                    particles.push(new Particle());
+                }
+            }
+            initParticles();
+
+            function animateParticles() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                for (let i = 0; i < particles.length; i++) {
+                    particles[i].update();
+                    particles[i].draw();
+                }
+                requestAnimationFrame(animateParticles);
+            }
+            animateParticles();
+
+            window.addEventListener('resize', () => {
+                resizeCanvas();
+                particles = [];
+                initParticles();
+            });
+        });
+    </script>
+
+</body>
+</html>

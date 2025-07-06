@@ -1,0 +1,1 @@
+// No JS needed for minimal static site. Card hover is handled by CSS. 
