@@ -6,7 +6,7 @@
     <title>APHEX</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --background-color: #0a0a0a;
@@ -27,7 +27,7 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            overflow: hidden;
+            overflow-x: hidden;
             position: relative;
         }
 
@@ -84,11 +84,11 @@
         .card-link:nth-child(2) { animation-delay: 0.4s; }
         .card-link:nth-child(3) { animation-delay: 0.6s; }
 
-        /* New Project Card Style */
+        /* Project Card Style */
         .project-card {
             position: relative;
             width: 300px;
-            height: 200px;
+            height: 220px; /* Increased height slightly for better spacing */
             background: var(--card-background);
             border-radius: 16px;
             overflow: hidden;
@@ -101,10 +101,7 @@
         .project-card::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
+            top: 0; left: 0; right: 0; bottom: 0;
             border-radius: inherit;
             padding: 2px;
             background: conic-gradient(from 180deg at 50% 50%, var(--secondary-glow), var(--primary-glow), var(--secondary-glow));
@@ -139,7 +136,6 @@
              background-image: linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px);
         }
 
-
         @keyframes rotate {
             from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }
@@ -161,7 +157,7 @@
         .project-content {
             position: relative;
             z-index: 2;
-            padding: 20px;
+            padding: 1.5rem; /* Unified padding */
             color: var(--text-color);
             text-align: center;
             display: flex;
@@ -172,32 +168,34 @@
             background: var(--card-background);
             border-radius: inherit;
             transition: transform 0.4s ease;
+            gap: 0.75rem; /* Consistent spacing between elements */
         }
 
         .card-link:hover .project-content {
             transform: translateY(-10px);
         }
-
-        .card-icon {
-            margin-bottom: 1rem;
-            color: rgba(255, 255, 255, 0.8);
-        }
-
-        .card-icon svg {
-            width: 36px;
-            height: 36px;
+        
+        /* --- IMPROVED STYLES --- */
+        /* Unified styling for all card images */
+        .card-image {
+            max-height: 65px; /* Set a max-height for visual consistency */
+            width: auto;      /* Maintain aspect ratio */
+            margin: 0;        /* Removed specific margins */
         }
 
         .project-content h3 {
-            margin: 0 0 10px 0;
-            font-size: 28px;
+            margin: 0;
+            font-size: 1.6rem; /* Adjusted font size for balance */
             font-weight: 600;
+            line-height: 1.2;
         }
 
         .project-content p {
             margin: 0;
             opacity: 0.7;
-            font-size: 1rem;
+            font-size: 0.95rem; /* Adjusted for better hierarchy */
+            line-height: 1.4;
+            max-width: 90%;   /* Prevents text from looking too wide */
             transition: opacity 0.3s ease;
         }
 
@@ -205,27 +203,6 @@
             opacity: 0.9;
         }
 
-
-/* Styling for XPOSED image */
-#card-1 .card-image {
-    width: 190px;
-    height: auto;
-    margin-bottom: 8px;
-}
-
-/* Styling for BRATZ image */
-#card-2 .card-image {
-    width: 78px;
-    height: auto;
-    margin-bottom: 8px;
-}
-
-/* Styling for BOT image */
-#card-3 .card-image {
-    width: 86px;
-    height: auto;
-    margin-bottom: 8px;
-}
     </style>
 </head>
 <body>
@@ -241,7 +218,7 @@
                 <div class="project-card" id="card-1">
                     <div class="card-pattern"></div>
                     <div class="project-content">
-                        <img src="xposed.png" alt="XPOSED" class="card-image">
+                        <img src="/xposed.png" alt="XPOSED" class="card-image" onerror="this.onerror=null;this.src='https://placehold.co/150x65/121212/f0f0f0?text=XPOSED';">
                         <h3>XPOSED</h3>
                         <p>A collection of pictures</p>
                     </div>
@@ -253,7 +230,7 @@
                 <div class="project-card" id="card-2">
                     <div class="card-pattern"></div>
                     <div class="project-content">
-                        <img src="bratz.png" alt="BRATZ" class="card-image">
+                        <img src="/bratz.png" alt="BRATZ" class="card-image" onerror="this.onerror=null;this.src='https://placehold.co/70x65/121212/f0f0f0?text=BRATZ';">
                         <h3>BRATZ</h3>
                         <p>Your go-to movie hub</p>
                     </div>
@@ -265,7 +242,7 @@
                 <div class="project-card" id="card-3">
                     <div class="card-pattern"></div>
                     <div class="project-content">
-                        <img src="bot.png" alt="BOT" class="card-image">
+                        <img src="/bot.png" alt="BOT" class="card-image" onerror="this.onerror=null;this.src='https://placehold.co/70x65/121212/f0f0f0?text=BOT';">
                         <h3>BOT</h3>
                         <p>Official Discord bot</p>
                     </div>
